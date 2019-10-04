@@ -10,9 +10,17 @@
     gpgcheck: true
   tags: mariadb
 
+- name: Install prerequisite packages
+  package:
+    name: "{{ item }}"
+    state: installed
+  with_items: "{{ mariadb_prerequisite_packages | default([]) }}"
+  tags: mariadb
+
 - name: Install packages
   package:
     name: "{{ item }}"
     state: installed
+    disablerepo: "{{ mariadb_disable_repos | default('') }}"
   with_items: "{{ mariadb_packages }}"
   tags: mariadb
